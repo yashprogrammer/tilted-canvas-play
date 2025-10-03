@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, PerspectiveCamera } from '@react-three/drei';
+import { Environment, PerspectiveCamera } from '@react-three/drei';
 import { Scene3D } from './Scene3D';
 
 export const Canvas3D = () => {
@@ -49,13 +49,6 @@ export const Canvas3D = () => {
         {/* Environment for reflections */}
         <Environment preset="city" />
         
-        {/* Optional: OrbitControls for additional manual control */}
-        <OrbitControls 
-          enableZoom={true}
-          enablePan={false}
-          minDistance={5}
-          maxDistance={20}
-        />
       </Canvas>
     </div>
   );

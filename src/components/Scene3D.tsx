@@ -12,22 +12,27 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
 
+  const initialRotationX = Math.PI / 4; // 45 degrees - edge pointing toward camera
+  
   useFrame(() => {
     if (groupRef.current) {
-      // Smooth tilt animation based on mouse position
-      const targetRotationX = mousePosition.y * 0.5;
-      const targetRotationY = mousePosition.x * 0.5;
+      // Limited rotation: 15 degrees X, 10 degrees Y
+      const maxRotationX = (15 * Math.PI) / 180; // 15 degrees in radians
+      const maxRotationY = (10 * Math.PI) / 180; // 10 degrees in radians
       
-      // Lerp for smooth transitions
+      const targetRotationX = initialRotationX + (mousePosition.y * maxRotationX);
+      const targetRotationY = mousePosition.x * maxRotationY;
+      
+      // Lerp for smooth transitions (reduced from 0.05 to 0.03 for less intensity)
       groupRef.current.rotation.x = THREE.MathUtils.lerp(
         groupRef.current.rotation.x,
         targetRotationX,
-        0.05
+        0.03
       );
       groupRef.current.rotation.y = THREE.MathUtils.lerp(
         groupRef.current.rotation.y,
         targetRotationY,
-        0.05
+        0.03
       );
     }
   });
