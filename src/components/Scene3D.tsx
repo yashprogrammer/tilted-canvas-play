@@ -25,8 +25,8 @@ export const Scene3D = () => {
   useFrame(() => {
     if (groupRef.current) {
       // Limited rotation: 15 degrees X, 10 degrees Y
-      const maxRotationX = (15 * Math.PI) / 180;
-      const maxRotationY = (10 * Math.PI) / 180;
+      const maxRotationX = (25 * Math.PI) / 180;
+      const maxRotationY = (15 * Math.PI) / 180;
       
       const targetRotationX = isHovering 
         ? initialRotationX + (mousePosition.y * maxRotationX)
