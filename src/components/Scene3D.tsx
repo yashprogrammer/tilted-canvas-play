@@ -1,8 +1,7 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF, Html } from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import Lottie from 'lottie-react';
 
 interface Scene3DProps {
   mousePosition: { x: number; y: number };
@@ -11,13 +10,6 @@ interface Scene3DProps {
 export const Scene3D = ({ mousePosition }: Scene3DProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
-  const [animationData, setAnimationData] = useState(null);
-
-  useEffect(() => {
-    fetch('/animations/Flasks.json')
-      .then(response => response.json())
-      .then(data => setAnimationData(data));
-  }, []);
 
   useFrame(() => {
     if (groupRef.current) {
@@ -43,31 +35,42 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
     <group ref={groupRef}>
       <primitive object={scene} scale={100} />
       
-      {/* Lottie animations at the red dot positions */}
-      {animationData && (
-        <>
-          {/* Left position */}
-          <Html position={[-1.6, 0, 0]} center>
-            <div style={{ width: '80px', height: '80px' }}>
-              <Lottie animationData={animationData} loop={true} />
-            </div>
-          </Html>
-          
-          {/* Right position */}
-          <Html position={[1.6, 0, 0]} center>
-            <div style={{ width: '80px', height: '80px' }}>
-              <Lottie animationData={animationData} loop={true} />
-            </div>
-          </Html>
-          
-          {/* Bottom position */}
-          <Html position={[0, -1.6, 0]} center>
-            <div style={{ width: '80px', height: '80px' }}>
-              <Lottie animationData={animationData} loop={true} />
-            </div>
-          </Html>
-        </>
-      )}
+      {/* Tiny 3D models at the red dot positions */}
+      {/* Left position */}
+      <mesh position={[-1.6, 0, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Right position */}
+      <mesh position={[1.6, 0, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Bottom position */}
+      <mesh position={[0, -1.6, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
     </group>
   );
 };
