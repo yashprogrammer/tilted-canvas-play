@@ -39,7 +39,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
       {/* Lottie animations at the positions */}
       {/* Left position */}
       <Html position={[-1.6, 0, 0]} center transform>
-        <div className="w-16 h-16 pointer-events-none">
+        <div className="w-8 h-8 pointer-events-none">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
