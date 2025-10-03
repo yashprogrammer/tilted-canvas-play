@@ -64,7 +64,7 @@ export const Scene3D = () => {
       {/* Lottie animations at the positions */}
       {/* Left position */}
       <Html position={[-1.6, 0, 0]} center>
-        <div className="w-24 h-24 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none shadow-2xl drop-shadow-2xl">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
@@ -75,7 +75,7 @@ export const Scene3D = () => {
       
       {/* Right position */}
       <Html position={[1.6, 0, 0]} center>
-        <div className="w-24 h-24 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none shadow-2xl drop-shadow-2xl">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
@@ -86,7 +86,7 @@ export const Scene3D = () => {
       
       {/* Bottom position */}
       <Html position={[0, -1.6, 0]} center>
-        <div className="w-24 h-24 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none shadow-2xl drop-shadow-2xl">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
