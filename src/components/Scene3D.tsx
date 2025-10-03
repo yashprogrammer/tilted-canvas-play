@@ -12,7 +12,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
 
-  const initialRotationX = Math.PI / 2; // 45 degrees - edge pointing toward camera
+  const initialRotationX = 0; // 45 degrees - edge pointing toward camera
   
   useFrame(() => {
     if (groupRef.current) {
