@@ -33,7 +33,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
 
   return (
     <group ref={groupRef}>
-      <primitive object={scene} scale={60} />
+      <primitive object={scene} scale={72} />
     </group>
   );
 };
