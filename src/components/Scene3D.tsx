@@ -37,7 +37,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
       
       {/* Tiny 3D models at the red dot positions */}
       {/* Left position */}
-      <mesh position={[-2, 0, 0]}>
+      <mesh position={[-1, 0, 0]}>
         <sphereGeometry args={[0.15, 32, 32]} />
         <meshStandardMaterial 
           color="#ef4444" 
