@@ -34,6 +34,43 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
   return (
     <group ref={groupRef}>
       <primitive object={scene} scale={100} />
+      
+      {/* Tiny 3D models at the red dot positions */}
+      {/* Left position */}
+      <mesh position={[-2, 0, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Right position */}
+      <mesh position={[2, 0, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
+      
+      {/* Bottom position */}
+      <mesh position={[0, -2, 0]}>
+        <sphereGeometry args={[0.15, 32, 32]} />
+        <meshStandardMaterial 
+          color="#ef4444" 
+          emissive="#ef4444" 
+          emissiveIntensity={0.5}
+          metalness={0.8}
+          roughness={0.2}
+        />
+      </mesh>
     </group>
   );
 };
