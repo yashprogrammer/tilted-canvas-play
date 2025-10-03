@@ -39,7 +39,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
       {/* Lottie animations at the positions */}
       {/* Left position */}
       <Html position={[-1.6, 0, 0]} center>
-        <div className="w-8 h-8 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
@@ -50,7 +50,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
       
       {/* Right position */}
       <Html position={[1.6, 0, 0]} center>
-        <div className="w-16 h-16 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
@@ -61,7 +61,7 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
       
       {/* Bottom position */}
       <Html position={[0, -1.6, 0]} center>
-        <div className="w-16 h-16 pointer-events-none">
+        <div className="w-24 h-24 pointer-events-none">
           <DotLottieReact
             src="/animations/Flasks.lottie"
             loop={true}
