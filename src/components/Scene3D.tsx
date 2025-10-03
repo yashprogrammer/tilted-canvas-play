@@ -1,29 +1,41 @@
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { useRef, useState } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import * as THREE from 'three';
 
-interface Scene3DProps {
-  mousePosition: { x: number; y: number };
-}
-
-export const Scene3D = ({ mousePosition }: Scene3DProps) => {
+export const Scene3D = () => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const { size } = useThree();
 
-  const initialRotationX = 0; // 45 degrees - edge pointing toward camera
+  const initialRotationX = 0;
   
+  const handlePointerMove = (event: any) => {
+    if (isHovering) {
+      // Normalize mouse position to -1 to 1 range relative to canvas
+      const x = (event.clientX / size.width) * 2 - 1;
+      const y = -(event.clientY / size.height) * 2 + 1;
+      setMousePosition({ x, y });
+    }
+  };
+
   useFrame(() => {
     if (groupRef.current) {
       // Limited rotation: 15 degrees X, 10 degrees Y
-      const maxRotationX = (15 * Math.PI) / 180; // 15 degrees in radians
-      const maxRotationY = (10 * Math.PI) / 180; // 10 degrees in radians
+      const maxRotationX = (15 * Math.PI) / 180;
+      const maxRotationY = (10 * Math.PI) / 180;
       
-      const targetRotationX = initialRotationX + (mousePosition.y * maxRotationX);
-      const targetRotationY = mousePosition.x * maxRotationY;
+      const targetRotationX = isHovering 
+        ? initialRotationX + (mousePosition.y * maxRotationX)
+        : initialRotationX;
+      const targetRotationY = isHovering 
+        ? mousePosition.x * maxRotationY
+        : 0;
       
-      // Lerp for smooth transitions (reduced from 0.05 to 0.03 for less intensity)
+      // Lerp for smooth transitions
       groupRef.current.rotation.x = THREE.MathUtils.lerp(
         groupRef.current.rotation.x,
         targetRotationX,
@@ -38,7 +50,15 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
   });
 
   return (
-    <group ref={groupRef}>
+    <group 
+      ref={groupRef}
+      onPointerEnter={() => setIsHovering(true)}
+      onPointerLeave={() => {
+        setIsHovering(false);
+        setMousePosition({ x: 0, y: 0 });
+      }}
+      onPointerMove={handlePointerMove}
+    >
       <primitive object={scene} scale={100} />
       
       {/* Lottie animations at the positions */}
