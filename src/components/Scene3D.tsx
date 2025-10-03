@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html } from '@react-three/drei';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import * as THREE from 'three';
 
 interface Scene3DProps {
@@ -35,42 +36,39 @@ export const Scene3D = ({ mousePosition }: Scene3DProps) => {
     <group ref={groupRef}>
       <primitive object={scene} scale={100} />
       
-      {/* Tiny 3D models at the red dot positions */}
+      {/* Lottie animations at the positions */}
       {/* Left position */}
-      <mesh position={[-1.6, 0, 0]}>
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshStandardMaterial 
-          color="#ef4444" 
-          emissive="#ef4444" 
-          emissiveIntensity={0.5}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
+      <Html position={[-1.6, 0, 0]} center transform>
+        <div className="w-16 h-16 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
       
       {/* Right position */}
-      <mesh position={[1.6, 0, 0]}>
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshStandardMaterial 
-          color="#ef4444" 
-          emissive="#ef4444" 
-          emissiveIntensity={0.5}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
+      <Html position={[1.6, 0, 0]} center transform>
+        <div className="w-16 h-16 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
       
       {/* Bottom position */}
-      <mesh position={[0, -1.6, 0]}>
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshStandardMaterial 
-          color="#ef4444" 
-          emissive="#ef4444" 
-          emissiveIntensity={0.5}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
+      <Html position={[0, -1.6, 0]} center transform>
+        <div className="w-16 h-16 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
     </group>
   );
 };
