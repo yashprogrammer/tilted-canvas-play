@@ -1,42 +1,27 @@
-import { useState } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useRef, useState } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useNavigate } from 'react-router-dom';
-import { useSpring, animated } from '@react-spring/three';
-import { springConfigs } from '@/lib/animationConfigs';
+import * as THREE from 'three';
 
 export const Scene3D = () => {
+  const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
   const { camera, size } = useThree();
   const navigate = useNavigate();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [animationProgress, setAnimationProgress] = useState(0);
 
-  const maxRotationX = (25 * Math.PI) / 180; // 25 degrees
-  const maxRotationY = (15 * Math.PI) / 180; // 15 degrees
+  const initialRotationX = 0;
   
-  // Unified animation using @react-spring/three
-  const [springs, api] = useSpring(() => ({
-    rotation: [0, 0, 0],
-    scale: [100, 100, 100],
-    cameraZ: 10,
-    config: springConfigs.hover,
-  }));
-
   const handlePointerMove = (event: any) => {
     if (isHovering && !isAnimating) {
-      // Normalize mouse position to -1 to 1 range relative to canvas
       const x = (event.clientX / size.width) * 2 - 1;
       const y = -(event.clientY / size.height) * 2 + 1;
       setMousePosition({ x, y });
-      
-      // Update spring for hover effect
-      api.start({
-        rotation: [y * maxRotationX, x * maxRotationY, 0],
-        config: springConfigs.hover,
-      });
     }
   };
 
@@ -44,39 +29,53 @@ export const Scene3D = () => {
     if (!isAnimating) {
       setIsAnimating(true);
       setIsHovering(false);
-      
-      // Animate with react-spring
-      api.start({
-        to: async (next) => {
-          // Animate rotation, scale, and camera in parallel
-          await next({
-            rotation: [0, Math.PI * 2, 0], // 360 degrees on Y axis
-            scale: [300, 300, 300],
-            cameraZ: 2,
-            config: springConfigs.elastic,
-          });
-          // Navigate after animation completes
-          navigate('/welcome');
-        },
-      });
     }
   };
-  
-  // Reset rotation when not hovering
-  if (!isHovering && !isAnimating) {
-    api.start({
-      rotation: [0, 0, 0],
-      config: springConfigs.hover,
-    });
-  }
 
-  // Apply camera position from spring
-  camera.position.z = springs.cameraZ.get();
+  useFrame(() => {
+    if (groupRef.current) {
+      if (isAnimating) {
+        const newProgress = Math.min(animationProgress + 0.015, 1);
+        setAnimationProgress(newProgress);
+        
+        groupRef.current.rotation.y = newProgress * Math.PI * 2;
+        
+        const scale = 100 + (newProgress * 200);
+        groupRef.current.scale.set(scale, scale, scale);
+        
+        camera.position.z = 10 - (newProgress * 8);
+        
+        if (newProgress >= 1) {
+          navigate('/welcome');
+        }
+      } else {
+        const maxRotationX = (25 * Math.PI) / 180;
+        const maxRotationY = (15 * Math.PI) / 180;
+        
+        const targetRotationX = isHovering 
+          ? initialRotationX + (mousePosition.y * maxRotationX)
+          : initialRotationX;
+        const targetRotationY = isHovering 
+          ? mousePosition.x * maxRotationY
+          : 0;
+        
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(
+          groupRef.current.rotation.x,
+          targetRotationX,
+          0.03
+        );
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(
+          groupRef.current.rotation.y,
+          targetRotationY,
+          0.03
+        );
+      }
+    }
+  });
 
   return (
-    <animated.group
-      rotation={springs.rotation as any}
-      scale={springs.scale as any}
+    <group 
+      ref={groupRef}
       onPointerEnter={() => !isAnimating && setIsHovering(true)}
       onPointerLeave={() => {
         setIsHovering(false);
@@ -85,7 +84,7 @@ export const Scene3D = () => {
       onPointerMove={handlePointerMove}
       onClick={handleClick}
     >
-      <primitive object={scene} />
+      <primitive object={scene} scale={100} />
       
       {/* Lottie animations at the positions */}
       {/* Left position */}
@@ -120,7 +119,7 @@ export const Scene3D = () => {
           />
         </div>
       </Html>
-    </animated.group>
+    </group>
   );
 };
 
