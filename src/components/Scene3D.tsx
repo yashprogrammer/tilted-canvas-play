@@ -1,12 +1,10 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useThree } from '@react-three/fiber';
 import { useGLTF, Html } from '@react-three/drei';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useNavigate } from 'react-router-dom';
 import { useSpring, animated } from '@react-spring/three';
-import { motion } from 'framer-motion-3d';
-import { springConfigs, lottieVariants } from '@/lib/animationConfigs';
-import * as THREE from 'three';
+import { springConfigs } from '@/lib/animationConfigs';
 
 export const Scene3D = () => {
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
@@ -82,63 +80,39 @@ export const Scene3D = () => {
     >
       <primitive object={scene} />
       
-      {/* Lottie animations with framer-motion-3d */}
+      {/* Lottie animations at the positions */}
       {/* Left position */}
-      <motion.group
-        position={[-1.6, 0, 0]}
-        variants={lottieVariants}
-        initial="initial"
-        whileHover="hover"
-        whileTap="tap"
-      >
-        <Html center>
-          <div className="w-24 h-24 pointer-events-none">
-            <DotLottieReact
-              src="/animations/Flasks.lottie"
-              loop={true}
-              autoplay
-            />
-          </div>
-        </Html>
-      </motion.group>
+      <Html position={[-1.6, 0, 0]} center>
+        <div className="w-24 h-24 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
       
       {/* Right position */}
-      <motion.group
-        position={[1.6, 0, 0]}
-        variants={lottieVariants}
-        initial="initial"
-        whileHover="hover"
-        whileTap="tap"
-      >
-        <Html center>
-          <div className="w-24 h-24 pointer-events-none">
-            <DotLottieReact
-              src="/animations/Flasks.lottie"
-              loop={true}
-              autoplay
-            />
-          </div>
-        </Html>
-      </motion.group>
+      <Html position={[1.6, 0, 0]} center>
+        <div className="w-24 h-24 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
       
       {/* Bottom position */}
-      <motion.group
-        position={[0, -1.6, 0]}
-        variants={lottieVariants}
-        initial="initial"
-        whileHover="hover"
-        whileTap="tap"
-      >
-        <Html center>
-          <div className="w-24 h-24 pointer-events-none">
-            <DotLottieReact
-              src="/animations/Flasks.lottie"
-              loop={true}
-              autoplay
-            />
-          </div>
-        </Html>
-      </motion.group>
+      <Html position={[0, -1.6, 0]} center>
+        <div className="w-24 h-24 pointer-events-none">
+          <DotLottieReact
+            src="/animations/Flasks.lottie"
+            loop={true}
+            autoplay
+          />
+        </div>
+      </Html>
     </animated.group>
   );
 };
