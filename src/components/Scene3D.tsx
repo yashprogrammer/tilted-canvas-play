@@ -5,7 +5,23 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { useNavigate } from 'react-router-dom';
 import * as THREE from 'three';
 
-export const Scene3D = () => {
+interface Scene3DProps {
+  animationSpeed?: number;
+  maxRotationX?: number;
+  maxRotationY?: number;
+  targetScale?: number;
+  cameraDistance?: number;
+  lerpSpeed?: number;
+}
+
+export const Scene3D = ({
+  animationSpeed = 0.015,
+  maxRotationX = (25 * Math.PI) / 180,
+  maxRotationY = (15 * Math.PI) / 180,
+  targetScale = 200,
+  cameraDistance = 8,
+  lerpSpeed = 0.03,
+}: Scene3DProps) => {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF('/models/Arious_3DLogo.glb');
   const { camera, size } = useThree();
@@ -35,23 +51,20 @@ export const Scene3D = () => {
   useFrame(() => {
     if (groupRef.current) {
       if (isAnimating) {
-        const newProgress = Math.min(animationProgress + 0.015, 1);
+        const newProgress = Math.min(animationProgress + animationSpeed, 1);
         setAnimationProgress(newProgress);
         
         groupRef.current.rotation.y = newProgress * Math.PI * 2;
         
-        const scale = 100 + (newProgress * 200);
+        const scale = 100 + (newProgress * targetScale);
         groupRef.current.scale.set(scale, scale, scale);
         
-        camera.position.z = 10 - (newProgress * 8);
+        camera.position.z = 10 - (newProgress * cameraDistance);
         
         if (newProgress >= 1) {
           navigate('/welcome');
         }
       } else {
-        const maxRotationX = (25 * Math.PI) / 180;
-        const maxRotationY = (15 * Math.PI) / 180;
-        
         const targetRotationX = isHovering 
           ? initialRotationX + (mousePosition.y * maxRotationX)
           : initialRotationX;
@@ -62,12 +75,12 @@ export const Scene3D = () => {
         groupRef.current.rotation.x = THREE.MathUtils.lerp(
           groupRef.current.rotation.x,
           targetRotationX,
-          0.03
+          lerpSpeed
         );
         groupRef.current.rotation.y = THREE.MathUtils.lerp(
           groupRef.current.rotation.y,
           targetRotationY,
-          0.03
+          lerpSpeed
         );
       }
     }
