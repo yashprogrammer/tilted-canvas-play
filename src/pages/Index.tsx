@@ -1,25 +1,5 @@
 import { Canvas3D } from "@/components/Canvas3D";
-import { AnimationControls } from "@/components/AnimationControls";
-import { useState } from "react";
-
 const Index = () => {
-  // Animation control states
-  const [animationSpeed, setAnimationSpeed] = useState(0.015);
-  const [maxRotationX, setMaxRotationX] = useState((25 * Math.PI) / 180);
-  const [maxRotationY, setMaxRotationY] = useState((15 * Math.PI) / 180);
-  const [targetScale, setTargetScale] = useState(200);
-  const [cameraDistance, setCameraDistance] = useState(8);
-  const [lerpSpeed, setLerpSpeed] = useState(0.03);
-
-  const handleReset = () => {
-    setAnimationSpeed(0.015);
-    setMaxRotationX((25 * Math.PI) / 180);
-    setMaxRotationY((15 * Math.PI) / 180);
-    setTargetScale(200);
-    setCameraDistance(8);
-    setLerpSpeed(0.03);
-  };
-
   return <main className="relative w-full h-screen overflow-hidden bg-gradient-bg">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 pointer-events-none" />
@@ -31,36 +11,12 @@ const Index = () => {
           {" "}Model
         </h1>
         <p className="mt-2 text-muted-foreground text-sm md:text-base">
-          Hover to interact • Click to animate • Adjust controls
+          Hover to interact with the model
         </p>
       </div>
       
-      {/* Animation Controls */}
-      <AnimationControls
-        animationSpeed={animationSpeed}
-        setAnimationSpeed={setAnimationSpeed}
-        maxRotationX={maxRotationX}
-        setMaxRotationX={setMaxRotationX}
-        maxRotationY={maxRotationY}
-        setMaxRotationY={setMaxRotationY}
-        targetScale={targetScale}
-        setTargetScale={setTargetScale}
-        cameraDistance={cameraDistance}
-        setCameraDistance={setCameraDistance}
-        lerpSpeed={lerpSpeed}
-        setLerpSpeed={setLerpSpeed}
-        onReset={handleReset}
-      />
-      
       {/* 3D Canvas */}
-      <Canvas3D
-        animationSpeed={animationSpeed}
-        maxRotationX={maxRotationX}
-        maxRotationY={maxRotationY}
-        targetScale={targetScale}
-        cameraDistance={cameraDistance}
-        lerpSpeed={lerpSpeed}
-      />
+      <Canvas3D />
       
       {/* Subtle glow effect */}
       <div className="absolute inset-0 pointer-events-none">
