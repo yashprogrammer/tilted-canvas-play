@@ -17,20 +17,12 @@ export const Scene3D = () => {
   const maxRotationX = (25 * Math.PI) / 180; // 25 degrees
   const maxRotationY = (15 * Math.PI) / 180; // 15 degrees
   
-  // Hover animation using @react-spring/three
-  const { rotation } = useSpring({
-    rotation: isHovering && !isAnimating
-      ? [mousePosition.y * maxRotationX, mousePosition.x * maxRotationY, 0]
-      : [0, 0, 0],
-    config: springConfigs.hover,
-  });
-
-  // Click animation using @react-spring/three
-  const [{ clickRotation, clickScale, cameraZ }, api] = useSpring(() => ({
-    clickRotation: 0,
-    clickScale: 100,
+  // Unified animation using @react-spring/three
+  const [springs, api] = useSpring(() => ({
+    rotation: [0, 0, 0],
+    scale: [100, 100, 100],
     cameraZ: 10,
-    config: springConfigs.elastic,
+    config: springConfigs.hover,
   }));
 
   const handlePointerMove = (event: any) => {
@@ -39,6 +31,12 @@ export const Scene3D = () => {
       const x = (event.clientX / size.width) * 2 - 1;
       const y = -(event.clientY / size.height) * 2 + 1;
       setMousePosition({ x, y });
+      
+      // Update spring for hover effect
+      api.start({
+        rotation: [y * maxRotationX, x * maxRotationY, 0],
+        config: springConfigs.hover,
+      });
     }
   };
 
@@ -52,9 +50,10 @@ export const Scene3D = () => {
         to: async (next) => {
           // Animate rotation, scale, and camera in parallel
           await next({
-            clickRotation: Math.PI * 2, // 360 degrees
-            clickScale: 300,
+            rotation: [0, Math.PI * 2, 0], // 360 degrees on Y axis
+            scale: [300, 300, 300],
             cameraZ: 2,
+            config: springConfigs.elastic,
           });
           // Navigate after animation completes
           navigate('/welcome');
@@ -62,14 +61,22 @@ export const Scene3D = () => {
       });
     }
   };
+  
+  // Reset rotation when not hovering
+  if (!isHovering && !isAnimating) {
+    api.start({
+      rotation: [0, 0, 0],
+      config: springConfigs.hover,
+    });
+  }
 
   // Apply camera position from spring
-  camera.position.z = cameraZ.get();
+  camera.position.z = springs.cameraZ.get();
 
   return (
     <animated.group
-      rotation={isAnimating ? [0, clickRotation, 0] : rotation as any}
-      scale={isAnimating ? clickScale : 100}
+      rotation={springs.rotation as any}
+      scale={springs.scale as any}
       onPointerEnter={() => !isAnimating && setIsHovering(true)}
       onPointerLeave={() => {
         setIsHovering(false);
